@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from auth.models import CustomUser
+from accounts.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 

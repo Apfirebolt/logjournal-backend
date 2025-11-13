@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     # Local apps
-    'auth',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +65,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "logjournal.urls"
 
-AUTH_USER_MODEL = "auth.CustomUser"
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 TEMPLATES = [
     {

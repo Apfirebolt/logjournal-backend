@@ -15,7 +15,7 @@ from rest_framework import filters
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
-from auth.models import CustomUser
+from accounts.models import CustomUser
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
