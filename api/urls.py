@@ -5,6 +5,8 @@ from .views import (
     TemplateDetailApiView,
     ListCreateCategoryApiView,
     CategoryDetailApiView,
+    ListCreateJournalEntryApiView,
+    JournalEntryDetailApiView,
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -19,4 +21,6 @@ urlpatterns = [
     path("templates/<uuid:uuid>/", TemplateDetailApiView.as_view(), name="template-detail"),
     path("categories/", ListCreateCategoryApiView.as_view(), name="category-list"),
     path("categories/<uuid:uuid>/", CategoryDetailApiView.as_view(), name="category-detail"),
+    path("journal-entries/", ListCreateJournalEntryApiView.as_view(), name="journalentry-list"),
+    path("journal-entries/<uuid:uuid>/", JournalEntryDetailApiView.as_view(), name="journalentry-detail"),
 ]

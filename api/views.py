@@ -9,7 +9,8 @@ from .serializers import (
     CustomUserSerializer,
     CustomTokenObtainPairSerializer,
     TemplateSerializer,
-    CategorySerializer
+    CategorySerializer,
+    JournalEntrySerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -18,7 +19,7 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
-from journal.models import Template, Category
+from journal.models import Template, Category, JournalEntry
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
@@ -118,5 +119,31 @@ class ListCreateCategoryApiView(ListCreateAPIView):
 class CategoryDetailApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uuid"
+
+
+# Journal Entry Views
+class ListCreateJournalEntryApiView(ListCreateAPIView):
+    serializer_class = JournalEntrySerializer
+    queryset = JournalEntry.objects.all()
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_fields = ["title", "created_by__username", "template__title"]
+    ordering_fields = ["created_at", "title"]
+    search_fields = ["title", "quote_of_the_day"]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+
+class JournalEntryDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = JournalEntrySerializer
+    queryset = JournalEntry.objects.all()
     permission_classes = [IsAuthenticated]
     lookup_field = "uuid"

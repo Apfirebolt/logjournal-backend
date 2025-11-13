@@ -55,7 +55,6 @@ class JournalEntry(TimeStampedModel):
     rate_your_day = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
-        # Fallback to the template title if the user didn't provide a title
         if self.title:
             return self.title
         return f"Entry from {self.created_at.date()}"
