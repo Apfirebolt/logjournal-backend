@@ -93,6 +93,3 @@ class TemplateDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = Template.objects.all()
     permission_classes = [IsAuthenticated]
     lookup_field = "uuid"
-
-    def get_queryset(self):
-        return Template.objects.all()
