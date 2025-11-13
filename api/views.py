@@ -11,6 +11,7 @@ from .serializers import (
     TemplateSerializer,
     CategorySerializer,
     JournalEntrySerializer,
+    TemplateFieldSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -19,7 +20,7 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
-from journal.models import Template, Category, JournalEntry
+from journal.models import Template, Category, JournalEntry, TemplateField
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
@@ -147,3 +148,27 @@ class JournalEntryDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = JournalEntry.objects.all()
     permission_classes = [IsAuthenticated]
     lookup_field = "uuid"
+
+
+
+# Template Field Views
+class ListCreateTemplateFieldApiView(ListCreateAPIView):
+    serializer_class = TemplateFieldSerializer
+    queryset = TemplateField.objects.all()
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_fields = ["template__title", "name"]
+    ordering_fields = ["name"]
+    search_fields = ["name"]
+
+
+class TemplateFieldDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = TemplateFieldSerializer
+    queryset = TemplateField.objects.all()
+    permission_classes = [IsAuthenticated]
+    lookup_field = "id"

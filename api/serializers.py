@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
-from journal.models import Template, Category, JournalEntry
+from journal.models import Template, Category, JournalEntry, TemplateField
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -125,3 +125,19 @@ class JournalEntrySerializer(serializers.ModelSerializer):
             "updated_at",
         )
         read_only_fields = ("created_by",)
+
+
+class TemplateFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TemplateField
+        fields = (
+            "id",
+            "template",
+            "name",
+            "field_type",
+            "category",
+            "order",
+            "is_required",
+            "created_at",
+            "updated_at",
+        )
