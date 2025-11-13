@@ -9,6 +9,8 @@ from .views import (
     JournalEntryDetailApiView,
     ListCreateTemplateFieldApiView,
     TemplateFieldDetailApiView,
+    ListCreateEntryFieldAnswerApiView,
+    EntryFieldAnswerDetailApiView,
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -50,5 +52,15 @@ urlpatterns = [
         "journal-entries/<uuid:uuid>/",
         JournalEntryDetailApiView.as_view(),
         name="journalentry-detail",
+    ),
+    path(
+        "entry-field-answers/",
+        ListCreateEntryFieldAnswerApiView.as_view(),
+        name="entryfieldanswer-list",
+    ),
+    path(
+        "entry-field-answers/<uuid:uuid>/",
+        EntryFieldAnswerDetailApiView.as_view(),
+        name="entryfieldanswer-detail",
     ),
 ]

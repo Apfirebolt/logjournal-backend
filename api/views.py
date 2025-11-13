@@ -12,6 +12,7 @@ from .serializers import (
     CategorySerializer,
     JournalEntrySerializer,
     TemplateFieldSerializer,
+    EntryFieldAnswerSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -20,7 +21,13 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
-from journal.models import Template, Category, JournalEntry, TemplateField
+from journal.models import (
+    Template,
+    Category,
+    JournalEntry,
+    TemplateField,
+    EntryFieldAnswer,
+)
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
@@ -70,7 +77,7 @@ class UserProfileApiView(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
-    
+
 
 # Template Views
 class ListCreateTemplateApiView(ListCreateAPIView):
@@ -150,7 +157,6 @@ class JournalEntryDetailApiView(RetrieveUpdateDestroyAPIView):
     lookup_field = "uuid"
 
 
-
 # Template Field Views
 class ListCreateTemplateFieldApiView(ListCreateAPIView):
     serializer_class = TemplateFieldSerializer
@@ -172,3 +178,26 @@ class TemplateFieldDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = TemplateField.objects.all()
     permission_classes = [IsAuthenticated]
     lookup_field = "id"
+
+
+# Entry Field Answer Views
+class ListCreateEntryFieldAnswerApiView(ListCreateAPIView):
+    serializer_class = EntryFieldAnswerSerializer
+    queryset = EntryFieldAnswer.objects.all()
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_fields = ["entry__title", "field__name"]
+    ordering_fields = ["field__name"]
+    search_fields = ["value"]
+
+
+class EntryFieldAnswerDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = EntryFieldAnswerSerializer
+    queryset = EntryFieldAnswer.objects.all()
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uuid"

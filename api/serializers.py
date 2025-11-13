@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
-from journal.models import Template, Category, JournalEntry, TemplateField
+from journal.models import Template, Category, JournalEntry, TemplateField, EntryFieldAnswer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -138,6 +138,19 @@ class TemplateFieldSerializer(serializers.ModelSerializer):
             "category",
             "order",
             "is_required",
+            "created_at",
+            "updated_at",
+        )
+
+
+class EntryFieldAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntryFieldAnswer
+        fields = (
+            "uuid",
+            "entry",
+            "field",
+            "value",
             "created_at",
             "updated_at",
         )
