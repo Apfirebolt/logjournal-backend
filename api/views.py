@@ -9,6 +9,7 @@ from .serializers import (
     CustomUserSerializer,
     CustomTokenObtainPairSerializer,
     TemplateSerializer,
+    CategorySerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -17,7 +18,7 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
-from journal.models import Template
+from journal.models import Template, Category
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
@@ -91,5 +92,31 @@ class ListCreateTemplateApiView(ListCreateAPIView):
 class TemplateDetailApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = TemplateSerializer
     queryset = Template.objects.all()
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uuid"
+
+
+# Category Views
+class ListCreateCategoryApiView(ListCreateAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_fields = ["name", "created_by__username"]
+    ordering_fields = ["name", "created_at"]
+    search_fields = ["name", "description"]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+
+class CategoryDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
     permission_classes = [IsAuthenticated]
     lookup_field = "uuid"

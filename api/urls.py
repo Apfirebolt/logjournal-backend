@@ -2,7 +2,9 @@ from django.urls import path, include
 from .views import (
     CreateCustomUserApiView,
     ListCreateTemplateApiView,
-    TemplateDetailApiView
+    TemplateDetailApiView,
+    ListCreateCategoryApiView,
+    CategoryDetailApiView,
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -15,4 +17,6 @@ urlpatterns = [
     path("refresh", TokenRefreshView.as_view(), name="refresh"),
     path("templates/", ListCreateTemplateApiView.as_view(), name="template-list"),
     path("templates/<uuid:uuid>/", TemplateDetailApiView.as_view(), name="template-detail"),
+    path("categories/", ListCreateCategoryApiView.as_view(), name="category-list"),
+    path("categories/<uuid:uuid>/", CategoryDetailApiView.as_view(), name="category-detail"),
 ]
