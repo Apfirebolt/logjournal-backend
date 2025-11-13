@@ -88,12 +88,11 @@ class TemplateSerializer(serializers.ModelSerializer):
             "uuid",
             "title",
             "description",
-            "slug",
             "created_by",
             "created_at",
             "updated_at",
         )
-        read_only_fields = ("created_by",)
+        read_only_fields = ("created_by", "slug",)
 
 
 
@@ -138,8 +137,6 @@ class TemplateFieldSerializer(serializers.ModelSerializer):
             "category",
             "order",
             "is_required",
-            "created_at",
-            "updated_at",
         )
 
 

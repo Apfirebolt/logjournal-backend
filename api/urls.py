@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import (
     CreateCustomUserApiView,
     ListCreateTemplateApiView,
@@ -21,9 +21,9 @@ urlpatterns = [
     path("register", CreateCustomUserApiView.as_view(), name="signup"),
     path("login", TokenObtainPairView.as_view(), name="signin"),
     path("refresh", TokenRefreshView.as_view(), name="refresh"),
-    path("templates/", ListCreateTemplateApiView.as_view(), name="template-list"),
+    path("templates", ListCreateTemplateApiView.as_view(), name="template-list"),
     path(
-        "templates/<uuid:uuid>/",
+        "templates/<uuid:uuid>",
         TemplateDetailApiView.as_view(),
         name="template-detail",
     ),
