@@ -8,6 +8,7 @@ from .serializers import (
     ListCustomUserSerializer,
     CustomUserSerializer,
     CustomTokenObtainPairSerializer,
+    TemplateSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -16,6 +17,7 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
+from journal.models import Template
 from rest_framework.response import Response
 from .pagination import CustomPagination
 
@@ -65,3 +67,32 @@ class UserProfileApiView(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+    
+
+# Template Views
+class ListCreateTemplateApiView(ListCreateAPIView):
+    serializer_class = TemplateSerializer
+    queryset = Template.objects.all()
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_fields = ["title", "created_by__username"]
+    ordering_fields = ["title", "created_at"]
+    search_fields = ["title", "description"]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+
+class TemplateDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = TemplateSerializer
+    queryset = Template.objects.all()
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uuid"
+
+    def get_queryset(self):
+        return Template.objects.all()

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
+from journal.models import Template
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -78,3 +79,19 @@ class ListCustomUserSerializer(serializers.ModelSerializer):
             "lastName",
             "is_staff",
         )
+
+
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = (
+            "id",
+            "uuid",
+            "title",
+            "description",
+            "slug",
+            "created_by",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("created_by",)
