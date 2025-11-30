@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "django_filters",
+    "django_celery_beat",
     # Local apps
     "accounts",
     "journal",
@@ -160,6 +161,28 @@ SIMPLE_JWT = {
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
+# 1. BROKER: Redis is used as the message broker
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0' # The last digit is the database number
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# Celery Beat Scheduler using the Django database
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'run-every-morning-at-3am': {
+        'task': 'journal.tasks.print_time_task', # Task path
+        'schedule': crontab(minute=0, hour=3), # Run daily at 3:00 AM
+        'name': 'Print Time Task Daily',
+    },
+    'run-every-minute-interval': {
+        'task': 'journal.tasks.print_time_task',
+        'schedule': 60.0, # Run every 60 seconds
+        'name': 'Print Time Task Minutely',
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
