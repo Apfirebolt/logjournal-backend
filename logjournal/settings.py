@@ -169,21 +169,6 @@ CELERY_TASK_SERIALIZER = 'json'
 # Celery Beat Scheduler using the Django database
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-from celery.schedules import crontab
-
-CELERY_BEAT_SCHEDULE = {
-    'run-every-morning-at-3am': {
-        'task': 'journal.tasks.print_time_task', # Task path
-        'schedule': crontab(minute=0, hour=3), # Run daily at 3:00 AM
-        'name': 'Print Time Task Daily',
-    },
-    'run-every-minute-interval': {
-        'task': 'journal.tasks.print_time_task',
-        'schedule': 60.0, # Run every 60 seconds
-        'name': 'Print Time Task Minutely',
-    },
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
